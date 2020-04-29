@@ -1,0 +1,31 @@
+
+<script>
+// convertNumberToString
+
+    function convertNumberToString(number, x = 10) {
+        debugger
+        if (Number.isNaN(number)) return 'NaN';
+        if (number === 0) return '0';
+        if (number < 0) {
+            var absNumber = 0 - number;
+            return `-${convertNumberToString(absNumber)}`
+        }
+        if (number > Infinity) return 'Infinity';
+        var integer = Math.floor(number);
+        var fraction = number - integer;
+        var string = '';
+        while(integer > 0) {
+            string = `${integer % x}` + string;
+            integer = Math.floor(integer / x);
+        }
+        while(fraction - Math.floor(fraction)) {
+            fraction = fraction * x;
+        }
+        // 四舍五入？？
+        string = `${string}.${fraction}`
+        
+        return string;
+    }
+   
+
+    </script>
