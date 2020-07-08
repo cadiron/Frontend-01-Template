@@ -1,0 +1,79 @@
+<div id="container">
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+    天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 天真 
+</div>
+<div id="dragable"></div>
+<style>
+    #dragable {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        background-color: lightblue;
+    }
+</style>
+<script>
+    let dragable = document.getElementById('dragable');
+    let container = document.getElementById('container');
+
+    let baseX = 0;
+    let baseY = 0;
+
+    let ranges = []
+
+    dragable.addEventListener('mousedown', (e) =>　{
+        console.log(e);
+        let startX = e.clientX;
+        let startY = e.clientY;
+
+        // move
+        let move = (e) => {
+            let range = nearest(e.clientX, e.clientY);
+            range.insertNode(dragable);
+        }
+
+        let up = (e) => {
+            baseX = baseX + e.clientX - startX;
+            baseY = baseY + e.clientY - startY;
+            document.removeEventListener('mousemove', move);
+            document.removeEventListener('mouseup', up);
+        };
+
+        document.addEventListener('mouseup', move);
+        document.addEventListener('mousemove', up);
+    });
+
+    for(let i =0; i < container.childNodes[0].textContent.length; i ++) {
+        let range = document.createRange();
+        range.setStart(container.childNodes[0], i);
+        range.setEnd(container.childNodes[0], i);
+        ranges.push(range);
+    }
+
+    function nearest(x0, y0) {
+        let nearestRange = null;
+        let distance = Infinity;
+
+        for(let range of ranges) {
+            let {x, y} = range.getBoundingClientRect();
+            let dis = (x0 - x) ** 2 + (y0 - y) ** 2;
+
+            if(dis < distance) {
+                nearestRange = range;
+                distance= dis;
+            }
+        }
+        return nearestRange;
+    }
+
+    document.addEventListener('selectstart', (e) => e.preventDefault());
+</script>
